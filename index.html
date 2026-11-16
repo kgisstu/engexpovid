@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>THE PEOPLE vs THE PLANET EARTH — Teaser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet">
+<!--
+  ╔══════════════════════════════════════════════════════════════════════╗
+  ║  THE PEOPLE vs THE PLANET EARTH — cinematic teaser (single file)     ║
+  ║  Open this file in Chrome/Edge. Press ▶ (sound on). F = fullscreen.  ║
+  ║  ?record=1  → hides all UI (click / Space once to start)             ║
+  ║  ?record=1&auto=1 → starts by itself (audio may be blocked)          ║
+  ║  ?t=45      → jump to 45s for checking a scene                       ║
+  ║  Keys: Space pause · R replay · M mute · F fullscreen                ║
+  ╚══════════════════════════════════════════════════════════════════════╝
+-->
+<style>
+:root{--bone:#efe9dd;--gold:#f2b35e;--red:#d8341f;--ice:#8fd3d0;--steel:#8fa7b5;--ink:#050505;
+  --disp:'Bebas Neue',Impact,'Arial Narrow',sans-serif;
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;overflow:hidden;color:var(--bone);-webkit-font-smoothing:antialiased}
+#viewport{position:fixed;inset:0;background:#000}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;margin:-540px 0 0 -960px;overflow:hidden;background:#000;transform-origin:50% 50%;backface-visibility:hidden}
+#world,.scene,.fx{position:absolute;inset:0}
+.fx{pointer-events:none}
+.scene{visibility:hidden;overflow:hidden;background:#000}
+#world{will-change:transform}
+
+/* ---------- photo rig ---------- */
+.gr{filter:grayscale(var(--g,0)) sepia(var(--s,0)) saturate(var(--sa,1)) contrast(var(--c,1)) brightness(var(--b,1)) hue-rotate(var(--h,0deg))}
+.grade,.cam,.layer,.strips,.strip{position:absolute;inset:0}
+.cam,.layer{will-change:transform;transform-origin:50% 50%}
+.layer.near{transform-origin:50% 90%;-webkit-mask-image:linear-gradient(to top,#000 0,#000 28%,transparent 66%);mask-image:linear-gradient(to top,#000 0,#000 28%,transparent 66%)}
+.layer img,.strip img,.cutimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.strip{overflow:hidden}
+.strip img{will-change:transform}
+.scrim{position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(to top,rgba(0,0,0,.78),rgba(0,0,0,.35) 55%,transparent)}
+.scrim.side{top:0;bottom:0;height:auto;width:64%;right:auto;background:linear-gradient(90deg,rgba(0,0,0,.74),rgba(0,0,0,.3) 60%,transparent)}
+.scrim.top{top:0;bottom:auto;height:40%;background:linear-gradient(to bottom,rgba(0,0,0,.6),transparent)}
+
+/* ---------- typography ---------- */
+.tx{position:absolute;color:var(--bone);--em:var(--red);
+  text-shadow:2px 0 rgba(255,40,70,.32),-2px 0 rgba(40,220,255,.28),0 6px 50px rgba(0,0,0,.65)}
+.tx.serif{font-family:var(--serif);font-style:italic;font-weight:600;line-height:1}
+.tx.disp{font-family:var(--disp);font-weight:400;line-height:.88}
+.ln{overflow:hidden;padding:.16em .12em;margin:-.16em -.12em}
+.ln-in{white-space:nowrap}
+.tx.nomask .ln{overflow:visible}
+.w{display:inline-block;white-space:nowrap}
+.c{display:inline-block;will-change:transform}
+.c.em{color:var(--em)}
+.tag{position:absolute;font-family:var(--disp);font-size:34px;letter-spacing:.42em;color:var(--bone);padding:4px 0 4px 22px;border-left:3px solid var(--red);opacity:.92;white-space:nowrap;text-shadow:0 2px 12px #000}
+.tag b{font-weight:400;color:var(--gold)}
+
+/* stat cards */
+.stat{position:absolute;padding-left:34px;width:900px}
+.sbar{position:absolute;left:0;top:10px;bottom:10px;width:5px;background:var(--red);transform-origin:50% 0}
+.snum{overflow:hidden;padding:.05em 0}
+.sin{font-family:var(--disp);font-size:172px;line-height:.9;display:inline-block;text-shadow:3px 0 rgba(255,40,70,.3),-3px 0 rgba(40,220,255,.25),0 6px 40px #000}
+.sin .u{font-size:88px;margin-left:10px;color:var(--gold)}
+.slbl{font-family:var(--serif);font-style:italic;font-weight:600;font-size:42px;color:var(--bone);margin-top:6px;text-shadow:0 3px 24px #000}
+
+/* ---------- pulse scene ---------- */
+#sun{position:absolute;left:260px;top:210px;width:1400px;height:900px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,206,130,.95),rgba(255,138,52,.55) 38%,rgba(255,80,30,.16) 68%,transparent);opacity:0;will-change:transform,opacity}
+#ecgsvg{position:absolute;inset:0}
+#hud{position:absolute;left:160px;top:176px;font-family:var(--disp);letter-spacing:.35em;font-size:28px;color:#ff6a58;text-shadow:0 0 14px rgba(255,60,40,.6);opacity:0}
+#hud span{color:var(--bone);opacity:.55}
+
+/* ---------- park / cold ---------- */
+.sunwash{position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 76% 18%,rgba(255,196,110,.5),transparent 70%),linear-gradient(to bottom,rgba(255,150,60,.10),rgba(255,120,40,.18))}
+.coldwash{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(60,95,130,.32),rgba(20,30,48,.5));opacity:0}
+.redwarn{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(216,52,31,.38),transparent 65%);opacity:0}
+
+/* ---------- house ---------- */
+#floodWrap{position:absolute;left:0;top:480px;width:1920px;height:640px;will-change:transform}
+#water{position:absolute;left:0;right:0;top:46px;bottom:0;background:linear-gradient(to bottom,rgba(24,52,60,.72),rgba(8,18,24,.92))}
+#wave{position:absolute;left:0;top:0;width:3840px;height:50px;animation:wave 7s linear infinite;will-change:transform}
+@keyframes wave{to{transform:translate3d(-1920px,0,0)}}
+#floodLine{position:absolute;left:0;right:0;top:44px;height:0;border-top:3px dashed rgba(255,92,70,.85);filter:drop-shadow(0 0 6px rgba(255,60,40,.7))}
+#floodLabel{position:absolute;right:150px;top:-4px;font-family:var(--disp);font-size:34px;letter-spacing:.3em;color:#ff6d58;text-shadow:0 0 12px #000;white-space:nowrap}
+
+/* ---------- court ---------- */
+.shaft{position:absolute;top:-200px;left:560px;width:380px;height:1500px;transform:rotate(22deg);background:linear-gradient(90deg,transparent,rgba(255,226,180,.16),transparent);filter:blur(18px);will-change:transform,opacity}
+#gavel{position:absolute;left:520px;top:440px;width:880px;height:500px;overflow:visible;visibility:hidden;filter:drop-shadow(0 20px 30px rgba(0,0,0,.7))}
+#shock{position:absolute;left:600px;top:680px;width:400px;height:400px;border-radius:50%;border:4px solid rgba(255,235,200,.85);opacity:0}
+.cover{position:absolute;inset:0;background:#000;visibility:hidden}
+.card{position:absolute;white-space:nowrap}
+.card .bar{position:absolute;left:0;top:0;bottom:0;width:10px;transform-origin:50% 0}
+.card .ctag{font-family:var(--disp);font-size:56px;letter-spacing:.5em;padding-left:44px;margin-bottom:6px}
+.card .cname{font-family:var(--disp);font-size:236px;line-height:.82;padding-left:40px;padding-right:40px;text-shadow:4px 0 rgba(255,40,70,.38),-4px 0 rgba(40,220,255,.32),0 8px 50px #000}
+.card.accused{left:120px;top:292px;background:linear-gradient(90deg,rgba(0,0,0,.78),rgba(0,0,0,.35) 70%,transparent);padding:26px 140px 26px 0}
+.card.accused .bar{background:var(--red)} .card.accused .ctag{color:#ff6a50}
+.card.victim{right:120px;top:590px;text-align:right;background:linear-gradient(270deg,rgba(0,0,0,.78),rgba(0,0,0,.35) 70%,transparent);padding:26px 0 26px 140px}
+.card.victim .bar{left:auto;right:0;background:var(--ice)} .card.victim .ctag{color:var(--ice);padding-left:0;padding-right:44px} .card.victim .cname{padding-right:40px}
+#cuts{position:absolute;inset:0;background:#000;visibility:hidden;overflow:hidden}
+.cutimg{position:absolute;inset:0;visibility:hidden;will-change:transform}
+#ring{position:absolute;left:660px;top:240px;width:600px;height:600px;opacity:.7}
+.cutword{position:absolute;left:0;right:0;top:340px;text-align:center;font-family:var(--disp);font-size:300px;line-height:.9;letter-spacing:.03em;color:#fff;visibility:hidden;text-shadow:6px 0 rgba(255,40,70,.6),-6px 0 rgba(40,220,255,.5),0 10px 60px #000}
+
+/* ---------- title ---------- */
+#earthArc{position:absolute;left:-840px;top:800px;width:3600px;height:520px;border-radius:50% 50% 0 0 / 100% 100% 0 0;background:linear-gradient(to bottom,#07101c,#010305 60%);
+  box-shadow:0 -4px 14px rgba(190,230,255,.7),0 -30px 120px rgba(110,180,255,.35),inset 0 10px 40px rgba(130,200,255,.5);will-change:transform}
+#flare{position:absolute;left:60px;top:520px;width:1800px;height:6px;border-radius:50%;background:linear-gradient(90deg,transparent,rgba(255,236,210,.95) 45%,#fff 50%,rgba(255,236,210,.95) 55%,transparent);box-shadow:0 0 60px 18px rgba(255,170,100,.45);opacity:0;transform-origin:50% 50%;mix-blend-mode:screen}
+.meta{font-family:var(--disp);letter-spacing:.34em;color:var(--bone);opacity:.95}
+
+/* ---------- global fx (outside the shaking world) ---------- */
+#leakA{position:absolute;left:-600px;top:-300px;width:1700px;height:1500px;background:radial-gradient(closest-side,rgba(255,150,60,.95),rgba(255,70,30,.38) 52%,transparent);mix-blend-mode:screen;opacity:0;will-change:transform,opacity}
+#leakB{position:absolute;right:-700px;bottom:-500px;width:1700px;height:1400px;background:radial-gradient(closest-side,rgba(90,190,255,.85),rgba(40,90,255,.3) 55%,transparent);mix-blend-mode:screen;opacity:0;will-change:transform,opacity}
+#vig{background:radial-gradient(ellipse 75% 70% at 50% 50%,transparent 45%,rgba(0,0,0,.55) 80%,rgba(0,0,0,.92) 120%)}
+#pulseFx{background:radial-gradient(ellipse at 50% 50%,transparent 35%,rgba(190,25,15,.55) 100%);opacity:0}
+#fringe{background:linear-gradient(90deg,rgba(255,0,60,.05),transparent 6%,transparent 94%,rgba(0,200,255,.05))}
+.lbx{position:absolute;left:0;right:0;background:#000}
+#flash{background:#fff;opacity:0}
+#grain{position:absolute;inset:-300px;background-size:512px 512px;opacity:.13;will-change:transform}
+#scratch{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.35);opacity:0}
+#fade{background:#000;opacity:0}
+#dust{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none}
+
+/* ---------- UI ---------- */
+#poster{position:fixed;inset:0;z-index:20;background:radial-gradient(ellipse at 50% 60%,#14100d,#000 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.2vh;text-align:center;transition:opacity .6s}
+#poster h1{font-family:var(--disp);font-weight:400;font-size:min(9vw,15vh);letter-spacing:.04em;line-height:.9}
+#poster h1 i{display:block;font-family:var(--serif);font-size:.42em;color:var(--red);letter-spacing:.1em;margin:.1em 0}
+#poster p{font-family:var(--serif);font-style:italic;font-size:min(2.2vw,3.4vh);opacity:.7}
+#playBig{font-family:var(--disp);font-size:min(3vw,5vh);letter-spacing:.4em;padding:.5em 1.4em .5em 1.8em;color:var(--bone);background:transparent;border:2px solid var(--bone);cursor:pointer;margin-top:2vh;transition:.25s}
+#playBig:hover{background:var(--bone);color:#000}
+#ui{position:fixed;left:0;right:0;bottom:0;z-index:15;display:flex;align-items:center;gap:14px;padding:14px 22px 18px;background:linear-gradient(to top,rgba(0,0,0,.75),transparent);transition:opacity .4s}
+body.idle #ui{opacity:0}
+body.idle{cursor:none}
+#ui button{font-family:var(--disp);font-size:22px;letter-spacing:.22em;color:var(--bone);background:rgba(0,0,0,.45);border:1px solid rgba(239,233,221,.5);padding:6px 16px 4px;cursor:pointer}
+#ui button:hover{background:var(--bone);color:#000}
+#prog{flex:1;height:3px;background:rgba(239,233,221,.2);position:relative}
+#progBar{position:absolute;inset:0;background:var(--red);transform-origin:0 50%;transform:scaleX(0)}
+#time{font-family:var(--disp);font-size:22px;letter-spacing:.2em;opacity:.8;min-width:150px;text-align:right}
+body.record #ui,body.record #poster{display:none}
+body.record{cursor:none}
+</style>
+</head>
+<body>
+
+<div id="viewport">
+ <div id="stage">
+  <div id="world">
+
+   <!-- 1 · PULSE → HORIZON -->
+   <section class="scene" id="s-pulse">
+     <div id="sun"></div>
+     <svg id="ecgsvg" viewBox="0 0 1920 1080" width="1920" height="1080">
+       <defs>
+         <linearGradient id="planetFill" x1="0" y1="0" x2="0" y2="1">
+           <stop offset="0" stop-color="#0c1a2b"/><stop offset=".3" stop-color="#040910"/><stop offset="1" stop-color="#000"/>
+         </linearGradient>
+       </defs>
+       <path id="planet" fill="url(#planetFill)" opacity="0"/>
+       <path id="glow2" fill="none" stroke-width="46" stroke-linejoin="round" pathLength="1"/>
+       <path id="glow1" fill="none" stroke-width="16" stroke-linejoin="round" pathLength="1"/>
+       <path id="line"  fill="none" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" pathLength="1"/>
+     </svg>
+     <div id="hud">♥ <b id="bpm">000</b> BPM &nbsp;<span>/ VITALS · PLANET EARTH</span></div>
+   </section>
+
+   <!-- 2/3 · PARK (warm) → COLD -->
+   <section class="scene" id="s-park"></section>
+
+   <!-- 4 · HOUSE -->
+   <section class="scene" id="s-house">
+     <div id="floodWrap">
+       <div id="water">
+       </div>
+       <svg id="wave" viewBox="0 0 3840 50" preserveAspectRatio="none">
+         <path d="M0 26 Q 120 4 240 26 T 480 26 T 720 26 T 960 26 T 1200 26 T 1440 26 T 1680 26 T 1920 26 T 2160 26 T 2400 26 T 2640 26 T 2880 26 T 3120 26 T 3360 26 T 3600 26 T 3840 26 V50 H0Z" fill="rgba(24,52,60,.72)"/>
+         <path d="M0 26 Q 120 4 240 26 T 480 26 T 720 26 T 960 26 T 1200 26 T 1440 26 T 1680 26 T 1920 26 T 2160 26 T 2400 26 T 2640 26 T 2880 26 T 3120 26 T 3360 26 T 3600 26 T 3840 26" fill="none" stroke="rgba(190,230,235,.35)" stroke-width="2"/>
+       </svg>
+       <div id="floodLine"><div id="floodLabel">FLOOD LINE · +0.23 m SINCE 1900</div></div>
+     </div>
+   </section>
+
+   <!-- 5 · COURT -->
+   <section class="scene" id="s-court">
+     <div class="shaft"></div>
+     <div id="cuts"></div>
+     <svg id="gavel" viewBox="0 0 880 500">
+       <defs>
+         <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b4226"/><stop offset=".5" stop-color="#3a2212"/><stop offset="1" stop-color="#150a04"/></linearGradient>
+         <linearGradient id="brass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a5a22"/><stop offset=".5" stop-color="#e8c880"/><stop offset="1" stop-color="#7a5a22"/></linearGradient>
+       </defs>
+       <rect x="90" y="440" width="380" height="54" rx="8" fill="url(#wood)"/>
+       <rect x="90" y="440" width="380" height="5" rx="2" fill="rgba(255,220,170,.45)"/>
+       <g id="gavelG">
+         <rect x="270" y="372" width="520" height="30" rx="15" fill="url(#wood)"/>
+         <rect x="270" y="372" width="520" height="5" rx="2.5" fill="rgba(255,220,170,.35)"/>
+         <rect x="205" y="290" width="130" height="150" rx="20" fill="url(#wood)"/>
+         <rect x="205" y="290" width="130" height="8" rx="4" fill="rgba(255,220,170,.4)"/>
+         <rect x="199" y="318" width="142" height="14" rx="3" fill="url(#brass)"/>
+         <rect x="199" y="398" width="142" height="14" rx="3" fill="url(#brass)"/>
+       </g>
+     </svg>
+     <div id="shock"></div>
+     <div class="cover"></div>
+   </section>
+
+   <!-- 6 · TITLE -->
+   <section class="scene" id="s-title">
+     <div id="earthArc"></div>
+     <div id="flare"></div>
+   </section>
+
+   <canvas id="dust" width="960" height="540"></canvas>
+  </div><!-- /world -->
+
+  <div class="fx" id="leakWrap"><div id="leakA"></div><div id="leakB"></div></div>
+  <div class="fx" id="vig"></div>
+  <div class="fx" id="pulseFx"></div>
+  <div class="fx" id="fringe"></div>
+  <div class="fx" id="barsWrap"><div class="lbx" id="barT" style="top:0"></div><div class="lbx" id="barB" style="bottom:0"></div></div>
+  <div class="fx" id="flash"></div>
+  <div class="fx" style="overflow:hidden"><div id="grain"></div><div id="scratch"></div></div>
+  <div class="fx" id="fade"></div>
+ </div>
+</div>
+
+<!-- chromatic aberration filter (only switched on during impacts / glitches) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="ca" x="-3%" y="-3%" width="106%" height="106%" color-interpolation-filters="sRGB">
+    <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+    <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" result="gb"/>
+    <feOffset in="r" id="caR" dx="0" dy="0" result="r2"/>
+    <feOffset in="gb" id="caB" dx="0" dy="0" result="gb2"/>
+    <feBlend in="r2" in2="gb2" mode="screen"/>
+  </filter>
+</svg>
+
+<div id="poster">
+  <h1>THE PEOPLE<i>vs</i>THE PLANET EARTH</h1>
+  <p>A courtroom teaser · sound on for the full effect</p>
+  <button id="playBig">▶ PLAY</button>
+  <p style="font-size:min(1.5vw,2.4vh);opacity:.45">Space pause · R replay · M mute · F fullscreen</p>
+</div>
+
+<div id="ui">
+  <button id="btnPlay">▶ PLAY</button>
+  <button id="btnMute">SOUND ON</button>
+  <button id="btnFs">FULLSCREEN (F)</button>
+  <div id="prog"><div id="progBar"></div></div>
+  <div id="time">0:00 / 1:40</div>
+</div>
+
+<!-- ═══════════════ CONFIG — edit text, timings and image paths here ═══════════════ -->
+<script>
+const CONFIG = {
+  /* ---- images: swap a file by changing one line (missing files get generated stand-ins) ---- */
+  images: {
+    park:  'assets/park.jpg',
+    house: 'assets/house.jpg',
+    court: 'assets/court.jpg'
+  },
+
+  /* ---- editable variables for the title card ---- */
+  meta: {
+    skit:  'English Skit',
+    date:  'DD MONTH YYYY',
+    venue: 'Your School · Auditorium'
+  },
+
+  /* ---- all text. *asterisks* = emphasised (coloured) words, \n = new line ---- */
+  text: {
+    pulse:    'Every story\nhas a *victim.*',
+    park:     "This is what\nwe're *fighting for.*",
+    parkSub:  'Every sunrise.\nEvery swing.\nEvery breath.',
+    parkTag:  ['EXHIBIT A', 'THE PARK'],
+    cold:     "And this is\nwhat we've *done.*",
+    coldTag:  ['EXHIBIT A', 'NOW'],
+    ppm:      { from: 280, to: 421, dec: 0, prefix: '', suffix: ' ppm', label: 'CO₂ in the air. The highest in 800,000 years.' },
+    houseTag: ['EXHIBIT B', 'THE HOUSE'],
+    stats: [
+      { from: 0, to: 1.2, dec: 1, prefix: '+', suffix: '°C', label: 'warmer than pre-industrial times' },
+      { from: 0, to: 8,   dec: 0, prefix: '',  suffix: 'M tonnes', label: 'of plastic enter our oceans every year' },
+      { from: 0, to: 10,  dec: 0, prefix: '',  suffix: 'M ha', label: 'of forest lost every year' }
+    ],
+    slams:    ['1 HOME.', '1 PLANET.', '*0* BACKUPS.'],
+    slamSub:  'There is no save file.',
+    session:  'COURT IS NOW IN SESSION',
+    caseTag:  ['CASE NO. 0001', 'THE PEOPLE v. HUMANITY'],
+    accused:  { tag: 'ACCUSED', name: 'HUMANITY' },
+    victim:   { tag: 'VICTIM',  name: 'PLANET EARTH' },
+    plead:    'How does\nhumanity *plead?*',
+    title1:   'THE PEOPLE',
+    titleVs:  'vs',
+    title2:   'THE PLANET EARTH',
+    tagline:  'The verdict is *yours.*'
+  },
+
+  /* ---- MASTER TIMELINE (seconds). Scenes must be back-to-back. Hard limit 120 ---- */
+  hardLimit: 120,
+  xfade: 0.6,          // overlap used for crossfades between scenes
+  endFade: 0.9,        // fade to black in the last seconds of the final scene
+  barHeight: 138,      // cinematic letterbox bars (px on a 1080 stage)
+  scenes: {
+    pulse: { start: 0,  dur: 9  },   // heartbeat → horizon
+    park:  { start: 9,  dur: 18 },   // warm golden park
+    cold:  { start: 27, dur: 13 },   // hard cold shift + glitch
+    house: { start: 40, dur: 22 },   // decay, haze, flood line, stats
+    court: { start: 62, dur: 24 },   // gavel, name cards, match cuts
+    title: { start: 86, dur: 14 }    // title card (ends at 100s)
+  },
+
+  /* ---- cue offsets, in seconds RELATIVE TO THEIR SCENE START ---- */
+  cues: {
+    pulse: { draw: 0.3, drawDur: 1.4, text: 2.7, textOut: 7.5, morph: 4.9, morphDur: 2.9, sun: 5.5, sunDur: 3.4, leak: 7.4 },
+    park:  { tag: 0.9, tagOut: 7.5, text: 1.3, textOut: 7.7, sub: [9.2, 11.0, 12.8], subOut: 16.2, riser: 16.6 },
+    cold:  { text: 1.1, textOut: 10.0, ppm: 2.8, ppmOut: 10.0, glitchOut: 10.4, black: 12.1 },
+    house: { fadeIn: 1.2, tag: 1.0, stats: [1.9, 4.1, 6.3], statsOut: 10.0, slams: [11.2, 13.4, 15.6], slamSub: 16.9,
+             slamOutAll: 19.3, flood: [0.5, 20.0], dark: [19.9, 21.6], flatline: 20.3 },
+    court: { fadeIn: 1.6, gavel: [1.8, 2.7], gavelOut: 3.7, session: 2.8, sessionOut: 4.9, accused: 5.4, victim: 7.9, cardsOut: 10.3,
+             cuts: 10.7, plead: 17.7, pleadOut: 21.9, finalGavelIn: 21.7, finalGavel: 22.8 },
+    title: { riser: 0.2, leak: 0.3, l1: 1.4, vs: 2.55, l2: 3.0, hit: 3.2, meta: 5.7, tagline: 8.2 }
+  },
+
+  /* ---- fast match cuts inside the court scene: duration of each shot, image, grade, word ---- */
+  cuts: [
+    { d: .90, img: 'park',  grade: 'warm',  word: 'CHILDHOOD' },
+    { d: .90, img: 'house', grade: 'decay', word: 'HOME' },
+    { d: .80, img: 'court', grade: 'dark',  word: 'JUSTICE' },
+    { d: .70, img: 'park',  grade: 'cold',  word: 'FUTURE' },
+    { d: .60, img: 'house', grade: 'flood', word: 'EVIDENCE' },
+    { d: .50, img: 'court', grade: 'dark',  word: 'TRUTH' },
+    { d: .45, img: 'park',  grade: 'warm',  word: 'CHOICE' },
+    { d: .40, img: 'house', grade: 'cold',  word: 'TIME' },
+    { d: .35, img: 'court', grade: 'dark',  word: '' },
+    { d: .30, img: 'park',  grade: 'cold',  word: '' },
+    { d: .30, img: 'house', grade: 'decay', word: '' },
+    { d: .30, img: 'court', grade: 'dark',  word: 'NOW.' }
+  ],
+
+  /* ---- heartbeat track (times relative to scene start; bpm & volume ramp from → to) ---- */
+  heartbeats: [
+    { scene: 'pulse', from: 0.9,  to: 8.3,  bpm: [46, 72],  vol: [0.55, 1.0] },
+    { scene: 'park',  from: 9.5,  to: 17.9, bpm: [54, 60],  vol: [0.10, 0.22] },
+    { scene: 'cold',  from: 0.8,  to: 10.3, bpm: [74, 112], vol: [0.7, 1.0] },
+    { scene: 'house', from: 2.0,  to: 19.6, bpm: [72, 132], vol: [0.5, 1.0] },
+    { scene: 'title', from: 7.9,  to: 12.4, bpm: [52, 38],  vol: [0.55, 0.28] }
+  ],
+
+  /* ---- audio (Web Audio, nothing to download). mix keyframes: [scene, rel seconds, levels] ---- */
+  audio: { enabled: true, volume: 0.85 },
+  mix: [
+    ['pulse', 0,    { drone: 0.00, warm: 0.0, cold: 0.0, tension: 0.0 }],
+    ['pulse', 1.5,  { drone: 0.35, warm: 0.0, cold: 0.0, tension: 0.1 }],
+    ['pulse', 8.5,  { drone: 0.55, warm: 0.0, cold: 0.0, tension: 0.2 }],
+    ['park',  3,    { drone: 0.30, warm: 0.9, cold: 0.0, tension: 0.0 }],
+    ['park',  17.5, { drone: 0.35, warm: 1.0, cold: 0.0, tension: 0.2 }],
+    ['cold',  0,    { drone: 0.70, warm: 0.0, cold: 0.9, tension: 0.7 }],
+    ['cold',  12,   { drone: 0.55, warm: 0.0, cold: 0.5, tension: 0.4 }],
+    ['house', 3,    { drone: 0.70, warm: 0.0, cold: 0.8, tension: 0.6 }],
+    ['house', 20,   { drone: 1.00, warm: 0.0, cold: 1.0, tension: 1.0 }],
+    ['court', 0.5,  { drone: 0.25, warm: 0.0, cold: 0.2, tension: 0.2 }],
+    ['court', 12,   { drone: 0.70, warm: 0.0, cold: 0.6, tension: 0.7 }],
+    ['court', 22.5, { drone: 0.90, warm: 0.0, cold: 0.8, tension: 0.9 }],
+    ['title', 0.4,  { drone: 0.20, warm: 0.0, cold: 0.1, tension: 0.2 }],
+    ['title', 3.3,  { drone: 0.95, warm: 0.4, cold: 0.6, tension: 0.8 }],
+    ['title', 12,   { drone: 0.60, warm: 0.5, cold: 0.3, tension: 0.4 }],
+    ['title', 13.9, { drone: 0.00, warm: 0.0, cold: 0.0, tension: 0.0 }]
+  ],
+
+  /* ---- grading presets (CSS filter variables: gray, sepia, saturate, contrast, brightness, hue) ---- */
+  grades: {
+    warm:  { '--g': 0,   '--s': .35, '--sa': 1.28, '--c': 1.06, '--b': 1.06, '--h': '0deg' },
+    cold:  { '--g': .88, '--s': .30, '--sa': .80,  '--c': 1.28, '--b': .72,  '--h': '175deg' },
+    decay: { '--g': .35, '--s': .45, '--sa': .85,  '--c': 1.12, '--b': .92,  '--h': '0deg' },
+    rot:   { '--g': .88, '--s': .50, '--sa': .60,  '--c': 1.32, '--b': .62,  '--h': '0deg' },
+    flood: { '--g': .55, '--s': .35, '--sa': .85,  '--c': 1.2,  '--b': .8,   '--h': '165deg' },
+    dark:  { '--g': .20, '--s': .25, '--sa': .90,  '--c': 1.22, '--b': .78,  '--h': '0deg' },
+    black: { '--g': 0.2, '--s': .25, '--sa': .90,  '--c': 1.22, '--b': 0,    '--h': '0deg' }
+  }
+};
+</script>
+
+<!-- GSAP: CDN first, local copy as offline fallback -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script>window.gsap || document.write('<script src="vendor/gsap.min.js"><\/script>')</script>
+
+<script>
+(() => {
+'use strict';
+const W = 1920, H = 1080;
+const $ = (s, r = document) => r.querySelector(s);
+const el = (tag, cls = '', html = '') => { const e = document.createElement(tag); if (cls) e.className = cls; if (html) e.innerHTML = html; return e; };
+const lerp = (a, b, k) => a + (b - a) * k;
+const rand = (a, b) => a + Math.random() * (b - a);
+const SC = CONFIG.scenes, CU = CONFIG.cues, TX_ = CONFIG.text, GR = CONFIG.grades;
+const abs = (scene, rel = 0) => SC[scene].start + rel;
+const TOTAL = Math.max(...Object.values(SC).map(s => s.start + s.dur));
+const params = new URLSearchParams(location.search);
+const RECORD = params.get('record') === '1';
+document.body.classList.toggle('record', RECORD);
+
+/* ════════════════════════ AUDIO — all synthesised ════════════════════════ */
+const SFX = (() => {
+  let ctx = null, master, out, wet, nbuf, muted = false, D = {};
+  const impulse = (sec, decay) => { const n = ctx.sampleRate * sec | 0, b = ctx.createBuffer(2, n, ctx.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, decay); } return b; };
+  function pad(freqs, type, cut, v) {
+    const g = ctx.createGain(); g.gain.value = 0; const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = cut;
+    lp.connect(g); g.connect(out);
+    freqs.forEach((f, i) => { const o = ctx.createOscillator(); o.type = type; o.frequency.value = f; o.detune.value = (i % 2 ? 1 : -1) * rand(4, 9);
+      const og = ctx.createGain(); og.gain.value = v; o.connect(og); og.connect(lp); o.start(); });
+    return g;
+  }
+  function init() {
+    if (ctx || !CONFIG.audio.enabled) return;
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    ctx = new AC();
+    master = ctx.createGain(); master.gain.value = muted ? 0 : CONFIG.audio.volume;
+    const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -16; comp.knee.value = 20; comp.ratio.value = 5;
+    master.connect(comp); comp.connect(ctx.destination);
+    out = ctx.createGain(); out.connect(master);
+    const rv = ctx.createConvolver(); rv.buffer = impulse(2.8, 2.4); wet = ctx.createGain(); wet.gain.value = .33; out.connect(wet); wet.connect(rv); rv.connect(master);
+    nbuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate); const d = nbuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    // sub drone
+    D.g = ctx.createGain(); D.g.gain.value = 0; D.lp = ctx.createBiquadFilter(); D.lp.type = 'lowpass'; D.lp.frequency.value = 160; D.lp.Q.value = 3;
+    D.lp.connect(D.g); D.g.connect(out);
+    [[55, 'sawtooth', .5], [55.45, 'sawtooth', .5], [27.5, 'sine', .9], [82.5, 'triangle', .22]].forEach(([f, t, v]) => {
+      const o = ctx.createOscillator(); o.type = t; o.frequency.value = f; const g = ctx.createGain(); g.gain.value = v; o.connect(g); g.connect(D.lp); o.start(); });
+    const lfo = ctx.createOscillator(); lfo.frequency.value = .08; const lg = ctx.createGain(); lg.gain.value = 70; lfo.connect(lg); lg.connect(D.lp.frequency); lfo.start();
+    D.warm = pad([220, 277.18, 329.63, 440, 554.37], 'triangle', 1500, .045);   // A major: nostalgia
+    D.cold = pad([110, 130.81, 138.59, 196, 233.08], 'sawtooth', 420, .03);      // Cm + b2 clash: dread
+  }
+  const now = () => ctx.currentTime;
+  const env = (g, t, a, peak, d) => { g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(peak, .0002), t + a); g.gain.exponentialRampToValueAtTime(.0001, t + a + d); };
+  function tone(type, f0, f1, t, a, d, v, dest) {
+    const o = ctx.createOscillator(); o.type = type; o.frequency.setValueAtTime(f0, t);
+    if (f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + Math.min(d, .3));
+    const g = ctx.createGain(); env(g, t, a, v, d); o.connect(g); g.connect(dest || out); o.start(t); o.stop(t + a + d + .05);
+  }
+  function noise(t, a, d, v, type, f, q, f1) {
+    const s = ctx.createBufferSource(); s.buffer = nbuf; s.loop = true; const bq = ctx.createBiquadFilter(); bq.type = type; bq.frequency.setValueAtTime(f, t);
+    if (f1) bq.frequency.exponentialRampToValueAtTime(f1, t + a + d); bq.Q.value = q || 1;
+    const g = ctx.createGain(); env(g, t, a, v, d); s.connect(bq); bq.connect(g); g.connect(out); s.start(t); s.stop(t + a + d + .05);
+  }
+  const API = {
+    init, resume() { if (ctx && ctx.state === 'suspended') ctx.resume(); }, suspend() { if (ctx) ctx.suspend(); },
+    get muted() { return muted; },
+    setMuted(m) { muted = m; if (ctx) master.gain.setTargetAtTime(m ? 0 : CONFIG.audio.volume, now(), .05); },
+    mix(m) { if (!ctx) return; const t = now();
+      D.g.gain.setTargetAtTime(m.drone * .55, t, .12); D.warm.gain.setTargetAtTime(m.warm, t, .2); D.cold.gain.setTargetAtTime(m.cold, t, .2);
+      D.lp.frequency.setTargetAtTime(130 + m.tension * 520, t, .2); },
+    heartbeat(v = 1) { if (!ctx) return; const t = now(); tone('sine', 96, 46, t, .008, .22, .95 * v); tone('sine', 82, 42, t + .19, .008, .2, .6 * v); noise(t, .004, .05, .05 * v, 'lowpass', 220, 1); },
+    gavel(v = 1) { if (!ctx) return; const t = now(); noise(t, .001, .07, .9 * v, 'bandpass', 2400, 1.1); noise(t, .001, .16, .55 * v, 'bandpass', 800, 1.4);
+      tone('sine', 210, 62, t, .001, .22, .9 * v); tone('triangle', 520, 160, t, .001, .09, .3 * v); },
+    boom(v = 1) { if (!ctx) return; const t = now(); tone('sine', 92, 30, t, .004, 2.4, 1.0 * v); noise(t, .003, 1.1, .55 * v, 'lowpass', 520, .8, 70); },
+    riser(dur = 3, v = .5) { if (!ctx) return; const t = now(); noise(t, dur * .96, .08, v, 'bandpass', 220, 3.5, 7000); tone('sawtooth', 70, 420, t, dur * .96, .08, v * .18); },
+    whoosh(v = .5) { if (!ctx) return; const t = now(); noise(t, .12, .55, v, 'bandpass', 5200, 1.2, 380); },
+    glitch(v = 1) { if (!ctx) return; const t = now(); for (let i = 0; i < 12; i++) { const tt = t + i * rand(.03, .07);
+      tone('square', rand(180, 3600), rand(80, 5000), tt, .001, rand(.02, .06), .09 * v); noise(tt, .001, .04, .22 * v, 'highpass', rand(1800, 6000), 1); } },
+    cut(k = 0) { if (!ctx) return; const t = now(); tone('sine', 120 + k * 60, 40, t, .002, .16, .8); noise(t, .001, .05, .3, 'highpass', 3000, 1); },
+    tick() { if (!ctx) return; noise(now(), .001, .02, .12, 'highpass', 5000, 1); },
+    stab() { if (!ctx) return; const t = now(); const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1800; lp.connect(out);
+      [110, 164.8, 220, 261.6, 329.6].forEach(f => tone('sawtooth', f, f, t, .02, 3.6, .07, lp)); tone('sine', 55, 55, t, .01, 3.2, .5); },
+    flatline(d = 1.6) { if (!ctx) return; tone('sine', 1000, 1000, now(), .02, d, .06); }
+  };
+  return API;
+})();
+
+/* ════════════════════════ stage scaling (16:9, any screen) ════════════════════════ */
+const stage = $('#stage'), world = $('#world');
+function fit() { const s = Math.min(innerWidth / W, innerHeight / H); stage.style.transform = `scale(${s})`; }
+addEventListener('resize', fit); fit();
+$('#barT').style.height = $('#barB').style.height = CONFIG.barHeight + 'px';
+
+/* ════════════════════════ images + stand-ins ════════════════════════ */
+const IMG = {};
+function standIn(key) {
+  const c = document.createElement('canvas'); c.width = 1920; c.height = 1080; const g = c.getContext('2d');
+  const lin = (stops, y0 = 0, y1 = 1080) => { const x = g.createLinearGradient(0, y0, 0, y1); stops.forEach(([o, col]) => x.addColorStop(o, col)); return x; };
+  const rad = (cx, cy, r, stops) => { const x = g.createRadialGradient(cx, cy, 0, cx, cy, r); stops.forEach(([o, col]) => x.addColorStop(o, col)); return x; };
+  if (key === 'park') {
+    g.fillStyle = lin([[0, '#ffb86b'], [.55, '#ffd9a0'], [1, '#6e8a3c']]); g.fillRect(0, 0, 1920, 1080);
+    g.fillStyle = rad(1400, 330, 700, [[0, 'rgba(255,250,220,1)'], [.3, 'rgba(255,214,140,.6)'], [1, 'transparent']]); g.fillRect(0, 0, 1920, 1080);
+    g.fillStyle = '#4c6a2a'; g.beginPath(); g.moveTo(0, 700); g.quadraticCurveTo(700, 600, 1920, 720); g.lineTo(1920, 1080); g.lineTo(0, 1080); g.fill();
+    g.fillStyle = '#233a14'; [[200, 620], [1650, 600], [1000, 640]].forEach(([x, y]) => { g.fillRect(x - 12, y, 24, 200); g.beginPath(); g.arc(x, y, 130, 0, 7); g.fill(); });
+    g.fillStyle = '#1b1208'; [[640, 840], [800, 880], [1180, 850], [1330, 900]].forEach(([x, y]) => { g.beginPath(); g.arc(x, y - 70, 24, 0, 7); g.fill(); g.fillRect(x - 18, y - 46, 36, 90); });
+  } else if (key === 'house') {
+    g.fillStyle = lin([[0, '#3a2a2a'], [.5, '#a5603a'], [1, '#32261f']]); g.fillRect(0, 0, 1920, 1080);
+    g.fillStyle = '#1a1210'; g.fillRect(560, 470, 800, 380); g.beginPath(); g.moveTo(520, 480); g.lineTo(960, 250); g.lineTo(1400, 480); g.fill();
+    g.fillStyle = '#c98a4c'; [[640, 560], [880, 560], [1120, 560]].forEach(([x, y]) => g.fillRect(x, y, 120, 140));
+    g.fillStyle = 'rgba(30,50,56,.85)'; g.fillRect(0, 820, 1920, 260);
+  } else {
+    g.fillStyle = lin([[0, '#1a120b'], [1, '#050302']]); g.fillRect(0, 0, 1920, 1080);
+    g.fillStyle = rad(960, 300, 800, [[0, 'rgba(255,220,160,.55)'], [1, 'transparent']]); g.fillRect(0, 0, 1920, 1080);
+    g.fillStyle = '#2b1a0d'; for (let i = 0; i < 6; i++) g.fillRect(140 + i * 300, 120, 70, 700);
+    g.fillStyle = '#3a2412'; g.fillRect(560, 560, 800, 200); g.fillStyle = '#0b0603'; g.fillRect(0, 820, 1920, 260);
+  }
+  return c.toDataURL('image/jpeg', .85);
+}
+function loadImages() {
+  return Promise.all(Object.entries(CONFIG.images).map(([k, src]) => new Promise(res => {
+    const im = new Image(); im.onload = () => { IMG[k] = src; res(); }; im.onerror = () => { console.warn(`[trailer] ${src} missing → using generated stand-in`); IMG[k] = standIn(k); res(); }; im.src = src;
+  })));
+}
+const imgEl = key => { const i = new Image(); i.src = IMG[key]; i.alt = ''; i.draggable = false; return i; };
+
+/* ════════════════════════ particles (pollen / ash / embers / dust) ════════════════════════ */
+const dust = { a: 0, r: 255, g: 214, b: 150, vx: 12, vy: -10, size: 1.2 };
+const dctx = $('#dust').getContext('2d'), sprite = document.createElement('canvas'); sprite.width = sprite.height = 32;
+{ const s = sprite.getContext('2d'), gr = s.createRadialGradient(16, 16, 0, 16, 16, 16); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.35, 'rgba(255,255,255,.55)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); s.fillStyle = gr; s.fillRect(0, 0, 32, 32); }
+const PART = Array.from({ length: 80 }, () => ({ x: rand(0, 960), y: rand(0, 540), z: rand(.25, 1), s: rand(3, 11), ph: rand(0, 7) }));
+
+/* ════════════════════════ film grain (generated tile, jittered) ════════════════════════ */
+{ const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'), id = x.createImageData(256, 256);
+  for (let i = 0; i < id.data.length; i += 4) { const v = Math.random() * 255 | 0; id.data[i] = id.data[i + 1] = id.data[i + 2] = v; id.data[i + 3] = Math.random() * 120 | 0; }
+  x.putImageData(id, 0, 0); $('#grain').style.backgroundImage = `url(${c.toDataURL()})`; }
+
+/* ════════════════════════ text engine (SplitText-style, hand-rolled) ════════════════════════ */
+let tl;                                       // master timeline (assigned in build)
+const S = (t, fn) => tl.call(fn, null, t);    // schedule a callback on the master clock
+
+function build(parent, text, cls = '', style = {}, fitMax = 0) {
+  const root = el('div', 'tx ' + cls), lines = [], lineChars = [], chars = [], words = []; let em = false;
+  text.split('\n').forEach(line => {
+    const ln = el('div', 'ln'), inn = el('div', 'ln-in'); ln.appendChild(inn); const lc = [];
+    line.split(' ').forEach((w, wi, arr) => {
+      const wEl = el('span', 'w');
+      for (const ch of w) { if (ch === '*') { em = !em; continue; } const c = el('span', 'c' + (em ? ' em' : '')); c.textContent = ch; wEl.appendChild(c); chars.push(c); lc.push(c); }
+      inn.appendChild(wEl); words.push(wEl); if (wi < arr.length - 1) inn.appendChild(document.createTextNode(' '));
+    });
+    root.appendChild(ln); lines.push(inn); lineChars.push(lc);
+  });
+  for (const k in style) k.startsWith('--') ? root.style.setProperty(k, style[k]) : (root.style[k] = style[k]); parent.appendChild(root);
+  if (fitMax) fitText(root, lines, fitMax);
+  return { root, lines, lineChars, chars, words };
+}
+/* keeps big type inside the frame even if the web font failed to load (fallback fonts are wider) */
+function fitText(root, lines, max) {
+  let w = 0; lines.forEach(l => { const cs = l.querySelectorAll('.c'); if (cs.length) { const a = cs[0], b = cs[cs.length - 1]; w = Math.max(w, b.offsetLeft + b.offsetWidth - a.offsetLeft); } });
+  if (w > max) { const fs = parseFloat(root.style.fontSize) || 100; root.style.fontSize = (fs * max / w).toFixed(1) + 'px'; }
+}
+const TX = {
+  rise(chars, t, o = {}) { tl.fromTo(chars, { yPercent: o.y ?? 125, rotation: o.rot ?? 7, opacity: 0 },
+    { yPercent: 0, rotation: 0, opacity: 1, duration: o.d ?? 1.1, ease: o.ease ?? 'expo.out', stagger: { each: o.each ?? .035, from: o.from ?? 'start' } }, t); },
+  fall(chars, t, o = {}) { tl.to(chars, { yPercent: -125, rotation: -5, opacity: 0, duration: o.d ?? .6, ease: 'power3.in', stagger: { each: .012 } }, t); },
+  through(root, t, o = {}) { tl.to(root, { scale: o.s ?? 6, opacity: 0, duration: o.d ?? 1, ease: 'power3.in', transformOrigin: '50% 50%' }, t); },
+  glitchIn(tx, t) { tl.fromTo(tx.chars, { opacity: 0, x: () => rand(-30, 30) }, { opacity: 1, x: 0, duration: .09, ease: 'steps(2)', stagger: { each: .035, from: 'random' } }, t);
+    for (let i = 0; i < 7; i++) { const tt = t + .9 + i * rand(.5, 1.1); tl.set(tx.root, { opacity: .25, x: rand(-14, 14) }, tt); tl.set(tx.root, { opacity: 1, x: 0 }, tt + rand(.04, .09)); } },
+  tracking(root, t, from = '.9em', to = '.42em', d = 1.4) { tl.fromTo(root, { letterSpacing: from }, { letterSpacing: to, duration: d, ease: 'expo.out' }, t); }
+};
+function tagEl(parent, [a, b], style) { const t = el('div', 'tag', `${a} &nbsp;/&nbsp; <b>${b}</b>`); Object.assign(t.style, style); parent.appendChild(t); return t; }
+function tagIn(t, at, out) { tl.fromTo(t, { autoAlpha: 0, x: -40 }, { autoAlpha: 1, x: 0, duration: .9, ease: 'power3.out' }, at); if (out != null) tl.to(t, { autoAlpha: 0, x: 30, duration: .6, ease: 'power2.in' }, out); }
+
+/* ════════════════════════ FX helpers (all on the master timeline) ════════════════════════ */
+function show(id, t, fade) { tl.fromTo('#s-' + id, { autoAlpha: 0 }, { autoAlpha: 1, duration: Math.max(fade, .001), ease: 'none' }, t); }
+function hide(id, t) { tl.set('#s-' + id, { autoAlpha: 0 }, t); }
+function shake(t, amp = 18, dur = .5, rot = 1) {
+  const n = Math.round(dur / .04);
+  for (let i = 0; i < n; i++) { const k = 1 - i / n; tl.to(world, { x: rand(-1, 1) * amp * k, y: rand(-1, 1) * amp * k, rotation: rand(-1, 1) * rot * k * .6, scale: 1 + .035 * k, duration: .04, ease: 'none' }, t + i * .04); }
+  tl.to(world, { x: 0, y: 0, rotation: 0, scale: 1, duration: .05, ease: 'none' }, t + n * .04);
+}
+function ca(t, amt = 8, dur = .35) {
+  tl.set(world, { filter: 'url(#ca)' }, t);
+  tl.fromTo('#caR', { attr: { dx: -amt } }, { attr: { dx: 0 }, duration: dur, ease: 'power3.out', immediateRender: false }, t);
+  tl.fromTo('#caB', { attr: { dx: amt } }, { attr: { dx: 0 }, duration: dur, ease: 'power3.out', immediateRender: false }, t);
+  tl.set(world, { filter: 'none' }, t + dur + .03);
+}
+function flash(t, peak = .85, dur = .4, color = '#fff') {
+  tl.set('#flash', { backgroundColor: color }, t);
+  tl.fromTo('#flash', { opacity: peak }, { opacity: 0, duration: dur, ease: 'power2.out', immediateRender: false }, t);
+}
+function leak(t, which = 'A', dur = 2, peak = .8) {
+  const id = which === 'A' ? '#leakA' : '#leakB';
+  tl.fromTo(id, { opacity: 0, xPercent: -25 }, { opacity: peak, xPercent: 8, duration: dur * .4, ease: 'power2.out', immediateRender: false }, t);
+  tl.to(id, { opacity: 0, xPercent: 40, duration: dur * .6, ease: 'power2.in' }, t + dur * .4);
+}
+function camMove(c, t, dur, from, to, ease = 'sine.inOut', span = false) {
+  tl.fromTo(c, from, { ...to, duration: dur, ease, data: span ? 'span' : undefined }, t);
+}
+function makeCam(parent, key, { near = true, prepend = true } = {}) {
+  const grade = el('div', 'grade gr'), cam = el('div', 'cam'), far = el('div', 'layer far'); far.appendChild(imgEl(key)); cam.appendChild(far);
+  let nr = null; if (near) { nr = el('div', 'layer near'); nr.appendChild(imgEl(key)); cam.appendChild(nr); }
+  grade.appendChild(cam); prepend ? parent.prepend(grade) : parent.appendChild(grade);
+  return { grade, cam, far, near: nr };
+}
+function makeStrips(cam, key, n, from, to) {   // horizontal image bands (glitch slices / heat shimmer)
+  const wrap = el('div', 'strips'), strips = []; const h = (to - from) / n;
+  for (let i = 0; i < n; i++) { const s = el('div', 'strip'), im = imgEl(key); s.style.clipPath = `inset(${(from + i * h).toFixed(2)}% 0 ${(100 - from - (i + 1) * h).toFixed(2)}% 0)`; s.appendChild(im); wrap.appendChild(s); strips.push({ s, im }); }
+  cam.appendChild(wrap); return { wrap, strips };
+}
+function statCard(parent, cfg, style) {
+  const fmt = v => `${cfg.prefix}${v.toFixed(cfg.dec)}`;
+  const c = el('div', 'stat', `<i class="sbar"></i><div class="snum"><div class="sin"><span class="n">${fmt(cfg.from)}</span><span class="u">${cfg.suffix.trim()}</span></div></div><div class="slbl">${cfg.label}</div>`);
+  Object.assign(c.style, style); parent.appendChild(c);
+  const inn = $('.sin', c), n = $('.n', c), bar = $('.sbar', c), lbl = $('.slbl', c), o = { v: cfg.from };
+  tl.set(inn, { yPercent: 118 }, 0); tl.set(bar, { scaleY: 0 }, 0); tl.set(lbl, { autoAlpha: 0, x: -24 }, 0);
+  return {
+    c, in(t) { tl.to(inn, { yPercent: 0, duration: .9, ease: 'expo.out' }, t); tl.to(bar, { scaleY: 1, duration: .7, ease: 'expo.out' }, t);
+      tl.to(lbl, { autoAlpha: 1, x: 0, duration: .9, ease: 'power3.out' }, t + .25);
+      tl.fromTo(o, { v: cfg.from }, { v: cfg.to, duration: 2.6, ease: 'power2.out', onUpdate: () => { n.textContent = fmt(o.v); } }, t + .1);
+      S(t, () => SFX.tick()); S(t + .9, () => SFX.tick()); },
+    out(t) { tl.to(c, { x: -180, autoAlpha: 0, duration: .6, ease: 'power3.in' }, t); }
+  };
+}
+
+/* heartbeat track → one list of beats */
+const BEATS = [];
+CONFIG.heartbeats.forEach(h => { const T0 = abs(h.scene, h.from), T1 = abs(h.scene, h.to); let t = T0;
+  while (t < T1) { const k = (t - T0) / (T1 - T0), bpm = lerp(h.bpm[0], h.bpm[1], k); BEATS.push({ t, v: lerp(h.vol[0], h.vol[1], k), bpm, scene: h.scene }); t += 60 / bpm; } });
+
+/* ════════════════════════ ECG → horizon renderer (driven by the master clock) ════════════════════════ */
+const ecg = { draw: 0, m: 0, glow: .25 };
+const ECG_BASE = 540, ECG_BIRTH = 1150, ECG_SPEED = 250, ECG_AMP = 210, ARC_Y = 628, ARC_R = 3200;
+const pulseBeats = BEATS.filter(b => b.scene === 'pulse').map(b => b.t - abs('pulse'));
+const gauss = (u, c, w) => Math.exp(-(((u - c) / w) ** 2));
+const shapeQRS = u => .12 * gauss(u, -.62, .12) - .12 * gauss(u, -.1, .04) + gauss(u, 0, .05) - .26 * gauss(u, .1, .04) + .24 * gauss(u, .55, .15);
+const L = $('#line'), G1 = $('#glow1'), G2 = $('#glow2'), PL = $('#planet');
+function renderEcg() {
+  if (!tl) return; const now = tl.time() - abs('pulse'); if (now < -.2 || now > SC.pulse.dur + CONFIG.xfade + .3) return;
+  const N = 480, step = W / N, m = ecg.m, centers = [];
+  pulseBeats.forEach(bt => { if (now >= bt) { const c = ECG_BIRTH - (now - bt) * ECG_SPEED; if (c > -300 && c < W + 300) centers.push(c); } });
+  let d = '';
+  for (let i = 0; i <= N; i++) {
+    const x = i * step; let sp = 0; for (const c of centers) { const u = (x - c) / 130; if (u > -1.2 && u < 1.2) sp += shapeQRS(u); }
+    const arc = ARC_Y + ARC_R - Math.sqrt(ARC_R * ARC_R - (x - 960) ** 2), flat = ECG_BASE - sp * ECG_AMP * (1 - m);
+    d += (i ? 'L' : 'M') + x.toFixed(1) + ' ' + lerp(flat, arc, m).toFixed(1);
+  }
+  const r = lerp(255, 190, m) | 0, g = lerp(84, 232, m) | 0, b = lerp(64, 255, m) | 0, off = 1 - ecg.draw;
+  for (const [p, col, op] of [[L, `rgb(${r},${g},${b})`, 1], [G1, `rgba(${r},${g},${b},${.30 * ecg.glow})`, 1], [G2, `rgba(${r},${g},${b},${.12 * ecg.glow})`, 1]]) {
+    p.setAttribute('d', d); p.setAttribute('stroke', col); p.style.strokeDasharray = '1 2'; p.style.strokeDashoffset = off; }
+  PL.setAttribute('d', d + `L${W} ${H}L0 ${H}Z`); PL.setAttribute('opacity', Math.min(1, m * 1.4));
+}
+
+/* ════════════════════════ SCENES ════════════════════════ */
+function scenePulse() {
+  const C = CU.pulse, t0 = abs('pulse'), sec = $('#s-pulse');
+  show('pulse', t0, .001);
+  tl.fromTo(ecg, { draw: 0 }, { draw: 1, duration: C.drawDur, ease: 'power2.out' }, t0 + C.draw);
+  tl.fromTo(ecg, { m: 0 }, { m: 1, duration: C.morphDur, ease: 'power3.inOut' }, t0 + C.morph);
+  tl.fromTo(ecg, { glow: .25 }, { glow: 1.1, duration: C.morphDur, ease: 'power2.in' }, t0 + C.morph);
+  tl.fromTo('#sun', { scale: .25, opacity: 0, yPercent: 35 }, { scale: 1, opacity: 1, yPercent: 0, duration: C.sunDur, ease: 'power2.inOut' }, t0 + C.sun);
+  tl.fromTo('#hud', { opacity: 0 }, { opacity: 1, duration: .6 }, t0 + 1.0);
+  tl.to('#hud', { opacity: 0, duration: .8 }, t0 + C.morph);
+  const tx = build(sec, TX_.pulse, 'serif', { left: 0, width: '100%', top: '150px', textAlign: 'center', fontSize: '128px', '--em': '#ff4a36' }, 1400);
+  TX.rise(tx.chars, t0 + C.text, { d: 1.4, each: .045 });
+  tl.fromTo(tx.root, { scale: 1.08 }, { scale: 1, duration: 4.6, ease: 'none' }, t0 + C.text);
+  TX.through(tx.root, t0 + C.textOut, { s: 7, d: 1.4 });
+  leak(t0 + C.leak, 'A', 1.9, .75);
+  // audio / beat sync
+  BEATS.filter(b => b.scene === 'pulse').forEach(b => S(b.t, () => { $('#bpm').textContent = String(Math.round(b.bpm)).padStart(3, '0'); }));
+  S(t0 + C.morph, () => SFX.riser(3.6, .5));
+  S(t0 + C.textOut, () => SFX.whoosh(.6));
+  dustTo(t0 + .01, { a: 0 });
+}
+
+function scenePark() {
+  const C = CU.park, t0 = abs('park'), t1 = abs('cold'), cC = CU.cold, sec = $('#s-park'), span = SC.park.dur + SC.cold.dur;
+  const rig = makeCam(sec, 'park');
+  gsap.set(rig.grade, GR.warm);
+  const glitch = makeStrips(rig.cam, 'park', 7, 4, 96);
+  gsap.set(glitch.strips.map(o => o.s), { autoAlpha: 0 });
+  // overlays
+  const wash = el('div', 'sunwash'), cold = el('div', 'coldwash'), warn = el('div', 'redwarn'), scrim = el('div', 'scrim');
+  sec.append(wash, cold, warn, scrim);
+  show('park', t0, CONFIG.xfade + .6);
+  hide('pulse', t0 + CONFIG.xfade + .6);
+  // camera (one continuous Ken Burns across park + cold) + parallax near layer
+  camMove(rig.cam, t0, span, { scale: 1.06, x: 0, y: 10, rotation: 0 }, { scale: 1.2, x: -34, y: -14, rotation: -.35 }, 'sine.inOut', true);
+  camMove(rig.near, t0, span, { scale: 1, x: 0, y: 0 }, { scale: 1.09, x: -50, y: 16 }, 'sine.inOut', true);
+  tl.fromTo(wash, { opacity: .55 }, { opacity: 1, duration: 4.5, ease: 'sine.inOut', repeat: 3, yoyo: true }, t0);
+  dustTo(t0 + .6, { a: .6, r: 255, g: 220, b: 150, vx: 14, vy: -9, size: 1.4 }, 1.6);
+  leak(t0 + .2, 'A', 3.2, .6);
+  // text — "This is what we're fighting for."
+  const tag = tagEl(sec, TX_.parkTag, { left: '150px', top: '156px' });
+  tagIn(tag, t0 + C.tag, t0 + C.tagOut);
+  const tx = build(sec, TX_.park, 'serif', { left: '150px', bottom: '172px', fontSize: '122px', '--em': '#ffc66a' }, 1250);
+  TX.rise(tx.chars, t0 + C.text, { d: 1.5, each: .04 });
+  tl.fromTo(tx.root, { x: 20 }, { x: -20, duration: 6.4, ease: 'none' }, t0 + C.text);
+  TX.fall(tx.chars, t0 + C.textOut);
+  // quiet lines
+  const sub = build(sec, TX_.parkSub, 'serif', { left: '150px', bottom: '172px', fontSize: '78px', '--em': '#ffc66a', lineHeight: 1.08 });
+  sub.lineChars.forEach((lc, i) => { TX.rise(lc, t0 + C.sub[i], { d: 1.4, each: .03, y: 130, rot: 5 }); });
+  tl.fromTo(sub.root, { x: 14 }, { x: -14, duration: 7.4, ease: 'none' }, t0 + C.sub[0]);
+  TX.fall(sub.chars, t0 + C.subOut, { d: .8 });
+  // tension builds into the hard cut
+  tl.fromTo(warn, { opacity: 0 }, { opacity: .8, duration: SC.park.dur - C.riser, ease: 'power2.in' }, t0 + C.riser);
+  S(t0 + C.riser, () => SFX.riser(SC.park.dur - C.riser, .45));
+
+  /* ---------- COLD: hard colour shift + glitch ---------- */
+  tl.set(rig.grade, GR.cold, t1);
+  tl.set(wash, { opacity: 0 }, t1); tl.set(warn, { opacity: 0 }, t1);
+  tl.fromTo(cold, { opacity: 0 }, { opacity: 1, duration: .01, immediateRender: false }, t1);
+  tl.set(rig.grade, { '--b': .72 }, t1);
+  flash(t1, 1, .35); ca(t1, 16, .6); shake(t1, 26, .55, 1.4);
+  S(t1, () => { SFX.boom(1); SFX.glitch(1); });
+  glitchBurst(glitch, t1, 1.1, 1);
+  dustTo(t1 + .02, { a: .55, r: 185, g: 198, b: 210, vx: -22, vy: 34, size: .9 }, .2);
+
+  const ctag = tagEl(sec, TX_.coldTag, { left: '150px', top: '156px' }); ctag.style.borderLeftColor = '#8fa7b5';
+  tagIn(ctag, t1 + cC.text, t1 + cC.textOut);
+  const ct = build(sec, TX_.cold, 'serif', { left: 0, width: '100%', textAlign: 'center', top: '270px', fontSize: '138px', '--em': '#ff4636', color: '#dfe8ee' }, 1500);
+  TX.glitchIn(ct, t1 + cC.text);
+  tl.fromTo(ct.root, { scale: 1.0 }, { scale: 1.07, duration: cC.textOut - cC.text, ease: 'none' }, t1 + cC.text);
+  tl.to(ct.chars, { opacity: 0, duration: .06, stagger: { each: .05, from: 'random' } }, t1 + cC.textOut);
+  const ppm = statCard(sec, TX_.ppm, { left: '150px', bottom: '168px' });
+  ppm.in(t1 + cC.ppm); ppm.out(t1 + cC.ppmOut);
+  BEATS.filter(b => b.scene === 'cold').forEach(b => tl.fromTo(warn, { opacity: .5 * b.v }, { opacity: 0, duration: .5, ease: 'power2.out', immediateRender: false }, b.t));
+  S(t1 + cC.ppm, () => SFX.whoosh(.35));
+
+  // glitch-out
+  const go = t1 + cC.glitchOut, bl = t1 + cC.black;
+  glitchBurst(glitch, go, bl - go - .2, 1.6); ca(go + .1, 14, .5); ca(go + .8, 18, .6);
+  S(go, () => SFX.glitch(1.2)); S(go + .7, () => SFX.glitch(1)); S(go + .1, () => SFX.riser(1.2, .3));
+  let tt = go; const stutter = [.12, 1, .35, .9, .08, .8, .2, .6, .0, .35, 0];
+  stutter.forEach((o, i) => { tl.set(rig.grade, { opacity: o }, tt); tt += (bl - go) / stutter.length; });
+  tl.set(rig.grade, { opacity: 0 }, bl);
+  tl.to([scrim, cold, wash], { opacity: 0, duration: .3 }, bl - .3);
+}
+function glitchBurst(g, t, dur, k = 1) {
+  const step = .07, n = Math.floor(dur / step), els = g.strips;
+  for (let i = 0; i < n; i++) els.forEach(({ s, im }) => { const on = Math.random() < .55 * k; tl.set(s, { autoAlpha: on ? 1 : 0 }, t + i * step); if (on) tl.set(im, { x: rand(-90, 90) * k }, t + i * step); });
+  tl.set(els.map(o => o.s), { autoAlpha: 0 }, t + n * step);
+}
+function dustTo(t, v, d = 1.2) { tl.to(dust, { ...v, duration: v.a != null && d > .01 ? d : .01, ease: 'none', data: 'ok' }, t); }
+
+function sceneHouse() {
+  const C = CU.house, t0 = abs('house'), sec = $('#s-house'), T = TX_;
+  const rig = makeCam(sec, 'house', { near: false });
+  gsap.set(rig.grade, GR.decay);
+  const haze = makeStrips(rig.cam, 'house', 16, 34, 100);
+  const sc = el('div', 'scrim'), sd = el('div', 'scrim side'); sec.insertBefore(sc, $('#floodWrap')); sec.insertBefore(sd, $('#floodWrap'));
+  const warn = el('div', 'redwarn'); sec.appendChild(warn);
+  show('house', t0, C.fadeIn); hide('park', t0 + C.fadeIn + .1);
+  // decay grade + camera
+  tl.fromTo(rig.grade, { ...GR.decay, '--b': .2 }, { '--b': .92, duration: C.fadeIn + .6, ease: 'power2.out', immediateRender: true }, t0);
+  tl.to(rig.grade, { ...GR.rot, '--b': .62, duration: C.dark[0] - 2.05, ease: 'power1.inOut' }, t0 + 2);
+  camMove(rig.cam, t0, SC.house.dur, { scale: 1.07, x: 24, y: -10, rotation: .6 }, { scale: 1.2, x: -30, y: 26, rotation: -.4 }, 'sine.inOut');
+  // heat haze: wobbling bands, amplitude grows as the house decays
+  const hz = { amp: .6 };
+  tl.fromTo(hz, { amp: .6 }, { amp: 5, duration: C.flood[1], ease: 'none' }, t0);
+  hazeTargets.length = 0; hazeTargets.push({ strips: haze.strips, hz, start: t0, end: t0 + SC.house.dur + CONFIG.xfade });
+  // flood line rising
+  tl.fromTo('#floodWrap', { y: 640 }, { y: 120, duration: C.flood[1] - C.flood[0], ease: 'power1.in' }, t0 + C.flood[0]);
+  dustTo(t0 + .1, { a: .5, r: 255, g: 150, b: 90, vx: 26, vy: -26, size: 1.0 }, 2);
+  leak(t0 + 8, 'B', 3, .3);
+  // tag + stat cards
+  const tag = tagEl(sec, T.houseTag, { left: '150px', top: '156px' }); tagIn(tag, t0 + C.tag, t0 + C.statsOut);
+  const cards = T.stats.map((s, i) => statCard(sec, s, { left: '150px', top: (214 + i * 224) + 'px' }));
+  cards.forEach((c, i) => { c.in(t0 + C.stats[i]); c.out(t0 + C.statsOut + i * .08); });
+  S(t0 + C.statsOut, () => SFX.whoosh(.5));
+  // slam lines: 1 HOME. / 1 PLANET. / 0 BACKUPS.
+  const slamStyle = { left: 0, width: '100%', textAlign: 'center', top: '320px', fontSize: '350px', '--em': '#ff3a26' };
+  const slams = T.slams.map(s => build(sec, s, 'disp', slamStyle, 1640));
+  slams.forEach((sl, i) => {
+    const t = t0 + C.slams[i], imp = t + .22, last = i === slams.length - 1;
+    const outAt = last ? t0 + C.slamOutAll : t0 + C.slams[i + 1] - .05;
+    tl.fromTo(sl.root, { scale: 3.2, opacity: 0 }, { scale: 1, opacity: 1, duration: .22, ease: 'power4.in', immediateRender: true }, t);
+    tl.to(sl.root, { scale: 1.06, duration: Math.max(outAt - imp, .1), ease: 'none' }, imp);
+    if (last) { TX.through(sl.root, outAt, { s: 8, d: .9 }); } else { tl.to(sl.root, { scale: 5, opacity: 0, duration: .32, ease: 'power3.in' }, outAt); }
+    shake(imp, last ? 34 : 20, last ? .8 : .45, last ? 2 : 1.2); ca(imp, last ? 20 : 12, .45); flash(imp, last ? .9 : .4, .4, last ? '#ff3a26' : '#fff');
+    S(imp, () => SFX.boom(last ? 1.25 : .9));
+    S(t - .05, () => SFX.whoosh(.45));
+  });
+  const sub = build(sec, T.slamSub, 'serif', { left: 0, width: '100%', textAlign: 'center', top: '700px', fontSize: '76px', color: '#e8e2d6' }, 1500);
+  TX.rise(sub.chars, t0 + C.slamSub, { d: 1.2, each: .04 });
+  tl.to(sub.chars, { opacity: 0, duration: .06, stagger: { each: .03, from: 'random' } }, t0 + C.slamOutAll - .2);
+  // heartbeat flashes
+  BEATS.filter(b => b.scene === 'house').forEach(b => tl.fromTo(warn, { opacity: .55 * b.v }, { opacity: 0, duration: .45, ease: 'power2.out', immediateRender: false }, b.t));
+  // to darkness + flatline
+  tl.to(rig.grade, { '--b': 0, duration: C.dark[1] - C.dark[0], ease: 'power2.in', overwrite: false }, t0 + C.dark[0]);
+  tl.to('#floodWrap', { opacity: 0, duration: C.dark[1] - C.dark[0] }, t0 + C.dark[0]);
+  S(t0 + C.flatline, () => SFX.flatline(1.5));
+}
+const hazeTargets = [];
+function renderHaze(time) {
+  for (const h of hazeTargets) { if (time < h.start - .1 || time > h.end) continue;
+    h.strips.forEach((o, i) => { o.im.style.transform = `translate3d(${(Math.sin(time * 2.3 + i * .9) * h.hz.amp * (0.4 + i / 24)).toFixed(2)}px,${(Math.sin(time * 1.7 + i * 1.3) * h.hz.amp * .25).toFixed(2)}px,0)`; }); }
+}
+
+function sceneCourt() {
+  const C = CU.court, t0 = abs('court'), sec = $('#s-court'), T = TX_;
+  const rig = makeCam(sec, 'court');
+  gsap.set(rig.grade, { ...GR.dark, '--b': 0 });
+  const vign = el('div', 'scrim top'); sec.insertBefore(vign, $('#cuts'));
+  show('court', t0, .001); hide('house', t0 + .05);
+  tl.fromTo(rig.grade, { '--b': 0 }, { '--b': .86, duration: C.fadeIn, ease: 'power2.out', immediateRender: true }, t0);
+  camMove(rig.cam, t0, SC.court.dur, { scale: 1.06, x: 20, y: 0, rotation: .5 }, { scale: 1.26, x: -24, y: 18, rotation: -.7 }, 'sine.inOut');
+  camMove(rig.near, t0, SC.court.dur, { scale: 1, x: 0 }, { scale: 1.1, x: -40 }, 'sine.inOut');
+  gsap.to('.shaft', { x: 90, opacity: .6, duration: 6, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+  dustTo(t0 + .5, { a: .38, r: 255, g: 232, b: 200, vx: 6, vy: -5, size: 1.3 }, 2);
+  leak(t0 + 1.7, 'A', 1.8, .4);
+
+  // gavel
+  const gv = $('#gavel'); gsap.set('#gavelG', { rotation: 40, svgOrigin: '790 387' });
+  const hits = [...C.gavel, C.finalGavel];
+  const ins = [C.gavel[0] - 1.0, C.finalGavelIn];
+  tl.fromTo(gv, { autoAlpha: 0 }, { autoAlpha: 1, duration: .3, immediateRender: true }, t0 + ins[0]);
+  tl.to(gv, { autoAlpha: 0, duration: .5 }, t0 + C.gavelOut);
+  tl.to(gv, { autoAlpha: 1, duration: .3 }, t0 + ins[1]);
+  hits.forEach((h, i) => {
+    const th = t0 + h, big = i === hits.length - 1;
+    tl.to('#gavelG', { rotation: 40, duration: .3, ease: 'power2.out', svgOrigin: '790 387' }, th - .58);
+    tl.to('#gavelG', { rotation: 0, duration: .26, ease: 'power4.in', svgOrigin: '790 387' }, th - .26);
+    tl.to('#gavelG', { rotation: 9, duration: .2, ease: 'power2.out', svgOrigin: '790 387' }, th);
+    shake(th, big ? 44 : (i ? 30 : 24), big ? .9 : .55, big ? 2.2 : 1.4); ca(th, big ? 22 : 14, .5); flash(th, big ? 1 : .8, big ? .7 : .45);
+    tl.fromTo('#shock', { scale: .15, opacity: .9 }, { scale: 3.4, opacity: 0, duration: .7, ease: 'power3.out', immediateRender: false }, th);
+    S(th, () => { SFX.gavel(big ? 1.2 : 1); SFX.boom(big ? 1.3 : .8); });
+  });
+
+  // session + case tag
+  const sess = build(sec, T.session, 'disp', { left: 0, width: '100%', textAlign: 'center', top: '212px', fontSize: '66px', letterSpacing: '.42em' }, 1500);
+  TX.rise(sess.chars, t0 + C.session, { d: .9, each: .03, y: 130, rot: 0 }); TX.tracking(sess.root, t0 + C.session, '.9em', '.42em', 1.6);
+  TX.fall(sess.chars, t0 + C.sessionOut);
+  const ctag = tagEl(sec, T.caseTag, { left: '150px', top: '156px' }); tagIn(ctag, t0 + C.session, t0 + C.sessionOut);
+
+  // name cards
+  const mk = (kind, d) => { const c = el('div', 'card ' + kind, `<i class="bar"></i><div class="ctag">${d.tag}</div><div class="cname">${d.name}</div>`); sec.appendChild(c); const nm = $('.cname', c); if (c.offsetWidth > 1500) nm.style.fontSize = (236 * (1500 - 180) / (c.offsetWidth - 180)).toFixed(1) + 'px'; return c; };
+  [['accused', T.accused, C.accused, -1], ['victim', T.victim, C.victim, 1]].forEach(([k, d, at, dir]) => {
+    const c = mk(k, d), t = t0 + at, imp = t + .2, bar = $('.bar', c), nm = $('.cname', c), tg = $('.ctag', c);
+    tl.fromTo(c, { autoAlpha: 0, scale: 2.7, x: dir * 240 }, { autoAlpha: 1, scale: 1, x: 0, duration: .2, ease: 'power4.in', immediateRender: true }, t);
+    tl.fromTo(bar, { scaleY: 0 }, { scaleY: 1, duration: .5, ease: 'expo.out', immediateRender: true }, imp);
+    tl.fromTo(nm, { scale: 1.07 }, { scale: 1, duration: .6, ease: 'elastic.out(1,.35)', immediateRender: false }, imp);
+    TX.tracking(tg, imp, '1.1em', '.5em', 1.0);
+    tl.to(c, { x: dir * -60, duration: C.cardsOut - at - .2, ease: 'none' }, imp);
+    tl.to(c, { x: dir * 1900, autoAlpha: 0, duration: .36, ease: 'power4.in' }, t0 + C.cardsOut);
+    shake(imp, 30, .6, 1.8); ca(imp, 18, .5); flash(imp, .55, .4, k === 'accused' ? '#ff4a30' : '#9be8e4');
+    S(imp, () => { SFX.boom(1.1); SFX.gavel(.6); }); S(t - .05, () => SFX.whoosh(.5));
+  });
+  S(t0 + C.cardsOut, () => SFX.whoosh(.6));
+
+  // fast match cuts
+  const cuts = $('#cuts'), layers = {};
+  ['park', 'house', 'court'].forEach(k => { const d = el('div', 'cutimg gr'); d.appendChild(imgEl(k)); cuts.appendChild(d); layers[k] = d; });
+  const ring = el('div'); ring.id = 'ring'; ring.innerHTML = '<svg viewBox="0 0 600 600" width="600" height="600"><circle cx="300" cy="300" r="260" fill="none" stroke="#fff" stroke-width="3" opacity=".8"/><circle cx="300" cy="300" r="200" fill="none" stroke="#fff" stroke-width="1" stroke-dasharray="4 14" opacity=".7"/><path d="M300 20v60M300 520v60M20 300h60M520 300h60" stroke="#fff" stroke-width="3"/></svg>';
+  cuts.appendChild(ring);
+  const cutStart = t0 + C.cuts; let ct = cutStart, prev = null; const n = CONFIG.cuts.length;
+  tl.set(cuts, { autoAlpha: 1 }, cutStart);
+  CONFIG.cuts.forEach((c, i) => {
+    const lay = layers[c.img], dir = i % 2 ? -1 : 1, z0 = i % 2 ? 1.0 : 1.38, z1 = i % 2 ? 1.28 : 1.12;
+    if (prev && prev !== lay) tl.set(prev, { autoAlpha: 0 }, ct);
+    tl.set(lay, { ...GR[c.grade], '--b': (GR[c.grade]['--b'] || 1) * 1.08 }, ct);
+    tl.fromTo(lay, { autoAlpha: 1, scale: z0, x: dir * 50, y: dir * -20 }, { scale: z1, x: dir * -40, y: dir * 16, duration: c.d, ease: 'none', immediateRender: false }, ct);
+    tl.fromTo(ring, { scale: 1.35, opacity: 1, rotation: 0 }, { scale: 1, opacity: .7, rotation: dir * 20, duration: Math.min(c.d, .5), ease: 'power4.out', immediateRender: false }, ct);
+    flash(ct, i % 3 === 0 ? .5 : .22, .16);
+    if (i % 3 === 0) ca(ct, 10, .25);
+    if (c.word) { const w = el('div', 'cutword'); w.textContent = c.word; cuts.appendChild(w);
+      tl.fromTo(w, { autoAlpha: 1, scale: 1.6 }, { scale: 1, duration: Math.min(c.d, .22), ease: 'power4.out', immediateRender: false }, ct);
+      tl.set(w, { autoAlpha: 0 }, ct + c.d); }
+    S(ct, () => SFX.cut(i / n));
+    prev = lay; ct += c.d;
+  });
+  const cutEnd = ct;
+  tl.set(cuts, { autoAlpha: 0 }, cutEnd); tl.set(prev, { autoAlpha: 0 }, cutEnd);
+  flash(cutEnd, 1, .9); ca(cutEnd, 24, .6); shake(cutEnd, 38, .7, 2);
+  S(cutEnd, () => { SFX.boom(1.4); SFX.glitch(.8); });
+  S(cutStart - .9, () => SFX.riser(.9, .4));
+
+  // "How does humanity plead?"
+  const pl = build(sec, T.plead, 'serif', { left: 0, width: '100%', textAlign: 'center', top: '318px', fontSize: '158px', '--em': '#ff4a36' }, 1500);
+  TX.rise(pl.chars, t0 + C.plead, { d: 1.5, each: .05 });
+  tl.fromTo(pl.root, { scale: 1.0 }, { scale: 1.08, duration: C.pleadOut - C.plead + .6, ease: 'none' }, t0 + C.plead);
+  TX.fall(pl.chars, t0 + C.pleadOut, { d: .7 });
+  S(t0 + C.plead - .1, () => SFX.whoosh(.4));
+  S(t0 + C.finalGavelIn, () => SFX.riser(C.finalGavel - C.finalGavelIn, .35));
+  // final gavel → black
+  const fin = t0 + C.finalGavel;
+  tl.set('#s-court .cover', { autoAlpha: 1 }, fin + .02);
+  tl.set('#gavel', { autoAlpha: 0 }, fin + .02);
+}
+
+function sceneTitle() {
+  const C = CU.title, t0 = abs('title'), sec = $('#s-title'), T = TX_, M = CONFIG.meta, d = SC.title.dur;
+  show('title', t0, .001); hide('court', t0 + .05);
+  tl.fromTo('#earthArc', { y: 140 }, { y: 0, duration: d, ease: 'power1.out' }, t0);
+  dustTo(t0 + .1, { a: .3, r: 255, g: 235, b: 215, vx: 6, vy: -8, size: 1.2 }, 2);
+  leak(t0 + C.leak, 'A', 3, .5); leak(t0 + C.hit, 'B', 3.2, .45);
+  S(t0 + C.riser, () => SFX.riser(C.hit - C.riser, .6));
+
+  const l1 = build(sec, T.title1, 'disp', { left: 0, width: '100%', textAlign: 'center', top: '176px', fontSize: '206px', letterSpacing: '.03em' }, 1500);
+  TX.rise(l1.chars, t0 + C.l1, { d: 1.2, each: .05, ease: 'back.out(1.8)', y: 130, rot: 10 });
+  const vs = build(sec, T.titleVs, 'serif', { left: 0, width: '100%', textAlign: 'center', top: '372px', fontSize: '110px', '--em': '#ff3a26', color: '#ff4a36' });
+  tl.fromTo(vs.root, { scale: 0, rotation: -14, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: .9, ease: 'back.out(4)', immediateRender: true }, t0 + C.vs);
+  const l2 = build(sec, T.title2, 'disp nomask', { left: 0, width: '100%', textAlign: 'center', top: '480px', fontSize: '222px', letterSpacing: '.02em' }, 1640);
+  tl.fromTo(l2.chars, { scale: 3.6, opacity: 0, yPercent: -10 }, { scale: 1, opacity: 1, yPercent: 0, duration: .55, ease: 'power4.out', stagger: { each: .045 }, immediateRender: true }, t0 + C.l2);
+  tl.fromTo(l2.root, { scale: 1.0 }, { scale: 1.05, duration: d - C.hit, ease: 'none' }, t0 + C.hit);
+  tl.fromTo(l1.root, { scale: 1.0 }, { scale: 1.03, duration: d - C.l1 - 1, ease: 'none' }, t0 + C.l1 + 1);
+  const hit = t0 + C.hit;
+  shake(hit, 30, .8, 1.4); ca(hit, 18, .6); flash(hit, .8, .8);
+  tl.fromTo('#flare', { opacity: 0, scaleX: .05 }, { opacity: 1, scaleX: 1, duration: .5, ease: 'expo.out', immediateRender: true }, hit);
+  tl.to('#flare', { opacity: .0, duration: 2.4, ease: 'power2.inOut' }, hit + .6);
+  S(hit, () => { SFX.boom(1.5); SFX.stab(); SFX.gavel(.5); });
+
+  const meta = build(sec, `${M.skit}  ·  ${M.date}  ·  ${M.venue}`.toUpperCase(), 'disp meta', { left: 0, width: '100%', textAlign: 'center', top: '740px', fontSize: '42px' }, 1640);
+  TX.rise(meta.chars, t0 + C.meta, { d: 1.0, each: .018, y: 130, rot: 0 }); TX.tracking(meta.root, t0 + C.meta, '.75em', '.34em', 2.2);
+  const tg = build(sec, T.tagline, 'serif', { left: 0, width: '100%', textAlign: 'center', top: '810px', fontSize: '84px', '--em': '#ff4a36' });
+  TX.rise(tg.chars, t0 + C.tagline, { d: 1.6, each: .05 });
+  tl.fromTo(tg.root, { scale: 1 }, { scale: 1.05, duration: d - C.tagline, ease: 'none' }, t0 + C.tagline);
+  S(t0 + C.tagline, () => SFX.whoosh(.35));
+}
+
+/* ════════════════════════ build master timeline ════════════════════════ */
+let AUDIT = null;
+function buildTimeline() {
+  tl = gsap.timeline({ paused: true, defaults: { overwrite: false } });
+  gsap.set(['#leakA', '#leakB'], { opacity: 0 });
+  // global: bars open, drift, beats
+  tl.fromTo('#barT, #barB', { height: CONFIG.barHeight + 70 }, { height: CONFIG.barHeight, duration: 3, ease: 'expo.out', immediateRender: true }, .2);
+  gsap.to('#leakA', { x: 80, y: 40, duration: 7, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+  gsap.to('#leakB', { x: -60, y: -30, duration: 9, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+  BEATS.forEach(b => { S(b.t, () => SFX.heartbeat(b.v));
+    tl.fromTo('#pulseFx', { opacity: .34 * b.v }, { opacity: 0, duration: .5, ease: 'power2.out', immediateRender: false }, b.t);
+    tl.fromTo('#vig', { scale: 1.0 + .035 * b.v }, { scale: 1, duration: .5, ease: 'power2.out', immediateRender: false }, b.t); });
+  scenePulse(); scenePark(); sceneHouse(); sceneCourt(); sceneTitle();
+  // audio mix automation
+  const mixO = { drone: 0, warm: 0, cold: 0, tension: 0 }, keys = CONFIG.mix.map(([s, r, v]) => ({ t: abs(s, r), v })).sort((a, b) => a.t - b.t);
+  Object.assign(mixO, keys[0].v);
+  for (let i = 0; i < keys.length - 1; i++) tl.to(mixO, { ...keys[i + 1].v, duration: Math.max(keys[i + 1].t - keys[i].t, .001), ease: 'none', onUpdate: () => SFX.mix(mixO), data: 'span' }, keys[i].t);
+  // fade out at the very end + lock total length
+  tl.fromTo('#fade', { opacity: 0 }, { opacity: 1, duration: CONFIG.endFade, ease: 'power2.in', immediateRender: true, data: 'ok' }, TOTAL - CONFIG.endFade);
+  tl.set('#stage', {}, TOTAL);
+  tl.eventCallback('onComplete', onEnd);
+  AUDIT = audit();
+}
+
+/* ════════════════════════ self-review (runs on load, see console) ════════════════════════ */
+function audit() {
+  const names = Object.keys(SC), issues = [];
+  names.forEach((n, i) => { if (i) { const p = SC[names[i - 1]]; if (Math.abs(SC[n].start - (p.start + p.dur)) > 1e-6) issues.push(`Scene overlap/gap between "${names[i - 1]}" and "${n}"`); } });
+  if (TOTAL > CONFIG.hardLimit) issues.push(`TOTAL ${TOTAL}s exceeds hard limit ${CONFIG.hardLimit}s`);
+  if (Math.abs(tl.duration() - TOTAL) > .02) issues.push(`Timeline duration ${tl.duration().toFixed(2)}s ≠ planned ${TOTAL}s (something runs past the end)`);
+  tl.getChildren(false, true, true, 0).forEach(k => { if (k.data === 'span' || k.data === 'ok') return;
+    const s = k.startTime(), e = k.endTime(), n = names.find(x => s >= SC[x].start - 1e-6 && s < SC[x].start + SC[x].dur - 1e-6); if (!n) return;
+    const lim = SC[n].start + SC[n].dur + CONFIG.xfade + 1e-3; if (e > lim + .001) issues.push(`Cue in "${n}" starting at ${s.toFixed(2)}s ends ${e.toFixed(2)}s (> scene end + crossfade ${lim.toFixed(2)}s)`); });
+  const report = { total: TOTAL, limit: CONFIG.hardLimit, ok: issues.length === 0, issues, scenes: names.map(n => `${n}: ${SC[n].start}–${SC[n].start + SC[n].dur}s`) };
+  console.log('%c[trailer] timeline audit', 'color:#f2b35e;font-weight:bold', report); if (issues.length) console.warn(issues.join('\n'));
+  return report;
+}
+
+/* ════════════════════════ player + controls ════════════════════════ */
+let started = false, ended = false;
+const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+function onEnd() { ended = true; $('#btnPlay').textContent = '↻ REPLAY'; }
+function start(from = 0) {
+  SFX.init(); SFX.resume(); started = true; ended = false;
+  $('#poster').style.opacity = 0; setTimeout(() => $('#poster').style.display = 'none', 650);
+  tl.pause(); tl.time(from, true); tl.play(); $('#btnPlay').textContent = '❚❚ PAUSE'; wake();
+}
+function toggle() {
+  if (!started) return start();
+  if (ended) return start();
+  if (tl.paused()) { tl.play(); SFX.resume(); $('#btnPlay').textContent = '❚❚ PAUSE'; } else { tl.pause(); SFX.suspend(); $('#btnPlay').textContent = '▶ RESUME'; }
+}
+function replay() { start(); }
+function mute() { SFX.setMuted(!SFX.muted); $('#btnMute').textContent = SFX.muted ? 'SOUND OFF' : 'SOUND ON'; }
+function fullscreen() { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); }
+const clk = (id, fn) => { $(id).onclick = e => { fn(); e.currentTarget.blur(); }; };
+clk('#playBig', () => start()); clk('#btnPlay', toggle); clk('#btnMute', mute); clk('#btnFs', fullscreen);
+addEventListener('keydown', e => {
+  const k = e.key.toLowerCase();
+  if (k === 'f') fullscreen(); else if (k === 'm') mute(); else if (k === 'r') replay(); else if (k === ' ' || k === 'enter') { e.preventDefault(); toggle(); }
+});
+if (RECORD) addEventListener('pointerdown', () => { if (!started) start(); }, { once: true });
+let idleT; const wake = () => { document.body.classList.remove('idle'); clearTimeout(idleT); if (started && !RECORD) idleT = setTimeout(() => document.body.classList.add('idle'), 2600); };
+addEventListener('mousemove', wake); addEventListener('pointerdown', wake);
+
+/* ════════════════════════ master ticker: grain, particles, ECG, haze, progress ════════════════════════ */
+let gT = 0; const grainEl = $('#grain'), scratchEl = $('#scratch'), progEl = $('#progBar'), timeEl = $('#time'); let lastShown = '';
+function tick(time, dt) {
+  const dts = Math.min(dt / 1000, .05);
+  // grain jitter ~24fps
+  gT += dts; if (gT > 1 / 24) { gT = 0; grainEl.style.transform = `translate3d(${-Math.floor(rand(0, 256))}px,${-Math.floor(rand(0, 256))}px,0)`;
+    if (Math.random() < .08) { scratchEl.style.left = rand(0, W) + 'px'; scratchEl.style.opacity = rand(.2, .6); } else scratchEl.style.opacity = 0; }
+  // particles
+  dctx.clearRect(0, 0, 960, 540);
+  if (dust.a > .01) {
+    for (const p of PART) { p.x += (dust.vx * .5 * p.z + Math.sin(time * .6 + p.ph) * 6 * p.z) * dts; p.y += dust.vy * .5 * p.z * dts;
+      if (p.x < -20) p.x = 980; if (p.x > 980) p.x = -20; if (p.y < -20) p.y = 560; if (p.y > 560) p.y = -20;
+      const r = p.s * dust.size * p.z; dctx.globalAlpha = dust.a * (.35 + .65 * Math.abs(Math.sin(time * .9 + p.ph))) * (.4 + p.z * .6); dctx.drawImage(sprite, p.x - r, p.y - r, r * 2, r * 2); }
+    dctx.globalAlpha = 1; dctx.globalCompositeOperation = 'source-in'; dctx.fillStyle = `rgb(${dust.r | 0},${dust.g | 0},${dust.b | 0})`; dctx.fillRect(0, 0, 960, 540); dctx.globalCompositeOperation = 'source-over';
+  }
+  if (tl) { renderEcg(); renderHaze(tl.time());
+    const t = tl.time(); progEl.style.transform = `scaleX(${Math.min(t / TOTAL, 1)})`; const lbl = `${fmt(t)} / ${fmt(TOTAL)}`; if (lbl !== lastShown) { lastShown = lbl; timeEl.textContent = lbl; } }
+}
+gsap.ticker.add(tick);
+gsap.ticker.lagSmoothing(0);
+
+/* ════════════════════════ boot ════════════════════════ */
+const fontsReady = Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 2500))]);
+Promise.all([loadImages(), fontsReady]).then(() => {
+  buildTimeline(); window.__trailer = { tl, CONFIG, audit: AUDIT, start, SFX };
+  tl.time(.02, true); tl.time(0, true); renderEcg();
+  const t = parseFloat(params.get('t'));
+  if (!isNaN(t)) { $('#poster').style.display = 'none'; started = true; tl.time(t, true); tl.pause(); window.__seek = x => { tl.time(x, true); }; }
+  if (params.get('auto') === '1' && isNaN(t)) start();
+  if (params.get('mute') === '1') mute();
+});
+})();
+</script>
+</body>
+</html>
